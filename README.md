@@ -1,5 +1,5 @@
-# GoReactiveHTML
-Like we have pythonic way, we are creating a Gothonic way.
+# GoReactiveHTML (aka GoReacTML)
+Like we have pythonic way, we are creating a Gothonic way for webdevelopment.
 
 GoReactiveHTML is a HTML on Gothonic way. 
 
@@ -33,7 +33,5 @@ SHOW ME THE CODE
 
 
 ### Dev Dependency
- - Vite
- - Nodejs
- - Npm
+ - extHTML
  - Go

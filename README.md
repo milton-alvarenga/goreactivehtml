@@ -15,6 +15,7 @@ Go is the simple, fast e light.
 HTML, JS and CSS are the web"languages"
 To code Frontend + Backend separated causes a lot of problems, like:
 - Code/Login repetition
+- Error-prone integrations
 - Many Unproductive Request
 - Many Data Conversion Name or structure
 

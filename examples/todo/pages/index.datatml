@@ -17,7 +17,7 @@ function updateDesc(task){
 <ul>
     <li *for={idx,task in Tasks} class={overwrite:task.Done}>
         <input type="checkbox" *model={task.Done} @change={Update(task)}/>
-        <span @click={edit_description = true} *v-if={!edit_description} class={strikethrought: task.Done}>{task.Description}</span>
+        <span @click={edit_description = true} *v-if={!edit_description} class={strikethrought: !task.Done}>{task.Description}</span>
         <input type="text" *model={task.Description} *v-if={edit_description} @blur={updateDesc(task)} />
         <button @click={delete(task.Id)}>X</button>
         <button @click={confirm("Delete the task?") && Delete(task.Id)}>X</button>

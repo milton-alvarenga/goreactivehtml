@@ -19,10 +19,13 @@ func checkPass(){
         {ErrorMsg}
     </div>
 
+    <div *if={SuccessMsg}>
+        {SuccessMsg}
+    </div>
+
     <button @click={SubmitSignup} disabled={checkPass}>Create Account</button>
     <p class="info-text">By signing up, you agree to our Terms & Conditions.</p>
 </div>
-
 
 <style>
     body {

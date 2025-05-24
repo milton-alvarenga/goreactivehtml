@@ -30,4 +30,5 @@ func SubmitSignup(Email string, Password string, ConfirmPassword string){
 	Email = ""
 	Password = ""
 	ConfirmPassword == ""
+	ErrorMsg = "Check your inbox mail to confirm your account creation on the validation link sent on the message"
 }

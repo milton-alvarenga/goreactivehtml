@@ -1,18 +1,19 @@
-
+<script>
 func checkPass(){
     return (Password == ConfirmPassword) && Password.trim() != ""
 }
+</script>
 
 <div class="signup-container">
     <h2>Sign Up</h2>
     <label (for)>Email</label>
-    <input type="email" *model={Email} *val={email} placeholder="Enter your email" required />
+    <input type="email" *model={Email} placeholder="Enter your email" *val={email;required} />
 
     <label (for)>Password</label>
-    <input type="password" *model={Password} class={error:checkPass} placeholder="Enter password" required />
+    <input type="password" *model={Password} class={error:checkPass} placeholder="Enter password" *val={required} />
 
     <label (for)>Confirm Password</label>
-    <input type="password" *model={ConfirmPassword} class={error:checkPass} placeholder="Repeat password" required />
+    <input type="password" *model={ConfirmPassword} class={error:checkPass} placeholder="Repeat password" *val={required} />
 
     <div *if={ErrorMsg}>
         {ErrorMsg}

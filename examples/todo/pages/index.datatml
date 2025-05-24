@@ -1,11 +1,24 @@
 <script>
 Load()
+
+let edit_description = false
+let updating = false
+
+function updateDesc(task){
+    updating = true
+    edit_description = false
+    Update(task)
+    updatime = false
+}
+
 </script>
 <input type="text" *model={Description} *val={required} @keydown.enter={Add}><button @click={Add}>Add</button>
+<div *v-if={updating}>Salving changes</div>
 <ul>
     <li *for={idx,task in Tasks} class={overwrite:task.Done}>
         <input type="checkbox" *model={task.Done} @change={Update(task)}/>
-        <span @click={edit_description}>{task.Description}</span>
+        <span @click={edit_description = true} *v-if={!edit_description}>{task.Description}</span>
+        <input type="text" *model={task.Description} *v-if={edit_description}  @blur={updateDesc(task)} />
         <button @click={delete(task.Id)}>X</button>
         <button @click={confirm("Delete the task?") && Delete(task.Id)}>X</button>
     </li>

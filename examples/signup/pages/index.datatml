@@ -78,4 +78,7 @@ func checkPass(){
       margin-bottom: 15px;
       text-align: center;
     }
+    .error {
+        border:1px solid red;
+    }
 </style>

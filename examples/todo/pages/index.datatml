@@ -12,7 +12,7 @@ function updateDesc(task){
 }
 
 </script>
-<input type="text" *model={Description} *val={required} @keydown.enter={Add}><button @click={Add}>Add</button>
+<input type="text" *model={Description} *val={required} @keydown.enter={Add} /><button @click={Add}>Add</button>
 <div *if={updating}>Salving changes</div>
 <ul>
     <li *for={idx,task in Tasks} class={overwrite:task.Done}>

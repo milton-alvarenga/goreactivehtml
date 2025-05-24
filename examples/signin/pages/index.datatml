@@ -19,7 +19,7 @@ function signin(){
         <input type="password" *model={Key}/>
     </div>
     <div *if={ErrorMsg}>
-
+        {ErrorMsg}
     </div>
     <div>
         <button @click={signin}>Sign in</button>

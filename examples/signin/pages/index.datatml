@@ -1,0 +1,27 @@
+function signin(){
+    let success = SignIn()
+    if(success){
+        window.href.location = "/dashboard";
+    }
+}
+
+
+<div>
+    <div>
+        <h3>Sign in</h3>
+    </div>
+    <div>
+        <label (for)>Login:</label>
+        <input type="text" *model={Email} />
+    </div>
+    <div>
+        <label (for)>Password:</label>
+        <input type="password" *model={Key}/>
+    </div>
+    <div *if={ErrorMsg}>
+
+    </div>
+    <div>
+        <button @click={signin}>Sign in</button>
+    </div>
+</div>

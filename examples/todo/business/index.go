@@ -46,7 +46,7 @@ func Load(){
 func Add(Description string) {
 	var id int
 
-	    query := "INSERT INTO task (description) VALUE ($1) RETURNING id"
+	query := "INSERT INTO task (description) VALUE ($1) RETURNING id"
 
     db.Conn.QueryRow(query,Description).Scan(&id)
     Description = ""

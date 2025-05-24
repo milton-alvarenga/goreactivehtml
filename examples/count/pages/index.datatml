@@ -1,0 +1,19 @@
+let count = 0
+
+<div>
+    <div class={red: count < 0, blue: count > 0}>
+    Count: {count}
+    </div>
+    <button @click={count--}>Decrease</button>
+    <button @click={count++}>Increase</button>
+</div>
+
+<style>
+.blue {
+    color: blue;
+}
+
+.red {
+    color: red;
+}
+</style>

@@ -12,11 +12,15 @@ var Email string
 var Password string
 var ConfirmPassword string
 var ErrorMsg string
+var SuccessMsg string
 
 func main (){
 
 }
 
+type OutputMsg struct {
+
+}
 
 func SubmitSignup(Email string, Password string, ConfirmPassword string){
 	//Checa
@@ -30,5 +34,21 @@ func SubmitSignup(Email string, Password string, ConfirmPassword string){
 	Email = ""
 	Password = ""
 	ConfirmPassword == ""
-	ErrorMsg = "Check your inbox mail to confirm your account creation on the validation link sent on the message"
+	ErrorMsg = ""
+	SuccessMsg = "Check your inbox mail to confirm your account creation on the validation link sent on the message"
 }
+
+transpilacao
+setEmail("")
+setPassword("")
+setConfirmPassword("")
+setErrorMsg("")
+setSuccessMsg("")
+
+
+set.Update(&Email,"")
+
+updateJs(
+	//verifca o dirty de cada variável para subir
+	//as funcoes set quem alteram realmente o escopo global e sujaram o dirty
+)

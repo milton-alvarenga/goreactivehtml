@@ -30,6 +30,7 @@ SHOW ME THE CODE
 - Home Broker app
 - Contact Form
 - Celsius to Fahrenheit page
+- Upload file
 
 
 ### TDLR; 

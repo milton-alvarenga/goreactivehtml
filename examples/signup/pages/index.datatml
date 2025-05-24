@@ -6,7 +6,7 @@ func checkPass(){
 <div class="signup-container">
     <h2>Sign Up</h2>
     <label (for)>Email</label>
-    <input type="email" *model={Email} placeholder="Enter your email" required />
+    <input type="email" *model={Email} *val={email} placeholder="Enter your email" required />
 
     <label (for)>Password</label>
     <input type="password" *model={Password} class={error:checkPass} placeholder="Enter password" required />

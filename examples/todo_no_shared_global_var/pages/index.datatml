@@ -1,0 +1,39 @@
+<script>
+//Just accept function
+import {Load,Update,Delete} from './integration/todo.js'
+let Tasks = Load()
+
+let edit_description = false
+let updating = false
+let description = ""
+
+function addTask(){
+    Add(description)
+    description = ""
+}
+
+function updateDesc(task){
+    updating = true
+    edit_description = false
+    Update(task)
+    updating = false
+}
+
+</script>
+<input type="text" *model={description} *val={required} @keydown:enter={Add} /><button @click={addTask}>Add</button>
+<div *if={updating}>Saving changes</div>
+<ul>
+    <li *for={idx,task in Tasks} class={overwrite:task.Done}>
+        <input type="checkbox" *model={task.Done} @change={Update(task)}/>
+        <span @click={edit_description = true} *if={!edit_description} class={strikethrought: !task.Done}>{task.Description}</span>
+        <input type="text" *model={task.Description} *if={edit_description} @blur={updateDesc(task)} />
+        <button @click={delete(task.Id)}>X</button>
+        <button @click={confirm("Delete the task?") && Delete(task.Id)}>X</button>
+    </li>
+    <li *forelse>No task</li>
+</ul>
+
+<style>
+.strikethrought {
+      text-decoration: line-through;
+}

@@ -1,5 +1,5 @@
 <script>
-func checkPass(){
+function checkPass(){
     return (Password == ConfirmPassword) && Password.trim() != ""
 }
 </script>

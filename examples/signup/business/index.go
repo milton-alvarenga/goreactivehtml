@@ -1,11 +1,7 @@
 package business
 
-import(
-	"database/sql"
-
-	_ "github.com/lib/pq"
-
-	"projectName/util/validation"
+import (
+	"fmt"
 )
 
 var Email string
@@ -14,30 +10,47 @@ var ConfirmPassword string
 var ErrorMsg string
 var SuccessMsg string
 
-func main (){
-
+func UpdateDescription(email string, login string) string {
+	return Email
 }
 
-type OutputMsg struct {
-
-}
-
-func SubmitSignup(Email string, Password string, ConfirmPassword string){
+func SubmitSignup(jsEmail string, jsPassword string, jsConfirmPassword string) {
 	//Checa
 	//Processa
-	
-	if ! validation.Email(Email){
+
+	//if !validation.Email(Email) {
+	if false {
 		ErrorMsg = "Invalid email"
 		return
 	}
+	fmt.Println("Before")
+	fmt.Println("Global email", jsEmail)
+	fmt.Println("Global password", jsPassword)
+	fmt.Println("Global confirmpassword", jsConfirmPassword)
+	fmt.Println("Global successMsg", SuccessMsg)
+	fmt.Println("Local email", Email)
+	fmt.Println("Local password", Password)
+	fmt.Println("Local confirmpassword", ConfirmPassword)
+	fmt.Println("Local successMsg", SuccessMsg)
 
 	Email = ""
 	Password = ""
-	ConfirmPassword == ""
+	ConfirmPassword = ""
 	ErrorMsg = ""
 	SuccessMsg = "Check your inbox mail to confirm your account creation on the validation link sent on the message"
+
+	fmt.Println("After")
+	fmt.Println("Global email", jsEmail)
+	fmt.Println("Global password", jsPassword)
+	fmt.Println("Global confirmpassword", jsConfirmPassword)
+	fmt.Println("Global successMsg", SuccessMsg)
+	fmt.Println("Local email", Email)
+	fmt.Println("Local password", Password)
+	fmt.Println("Local confirmpassword", ConfirmPassword)
+	fmt.Println("Local successMsg", SuccessMsg)
 }
 
+/*
 transpilacao
 setEmail("")
 setPassword("")
@@ -52,3 +65,4 @@ updateJs(
 	//verifca o dirty de cada variável para subir
 	//as funcoes set quem alteram realmente o escopo global e sujaram o dirty
 )
+*/

@@ -1,0 +1,25 @@
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+
+        # Overrides default command so things don't shut down after the process ends.
+        command: sleep infinity
+
+        env_file:
+            - .env
+
+        #networks:
+        #    - aquant-net
+
+        volumes:
+            - ../..:/workspaces:cached
+            - ../goexthtml:/app
+        ports:
+            - 8003:8003
+
+#networks:
+#    aquant-net:
+#        external: true

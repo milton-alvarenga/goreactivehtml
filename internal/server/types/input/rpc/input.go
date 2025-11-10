@@ -40,11 +40,11 @@ func (c ClientInputRPC) SendToClient(ClientOutput types.ClientOutput) bool {
 
 func (c ClientInputRPC) IsValidMessage() error {
 
-	if !c.IsValidEndpoint() {
+	if !c.IsValidExecutor() {
 		return errors.New("invalid endpoint")
 	}
 
-	if !c.IsValidOperation(c.Operation) {
+	if !c.IsValidOperation(c.Method) {
 		return errors.New("invalid operation")
 	}
 

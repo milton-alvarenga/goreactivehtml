@@ -8,6 +8,8 @@ import (
 	"github.com/milton-alvarenga/goreactivehtml/internal/server/handle/auth"
 	"github.com/milton-alvarenga/goreactivehtml/internal/server/types"
 	"github.com/milton-alvarenga/goreactivehtml/internal/server/types/input/rest"
+	"github.com/milton-alvarenga/goreactivehtml/internal/server/types/input/rpc"
+	"github.com/milton-alvarenga/goreactivehtml/internal/server/types/input/subscribe"
 )
 
 var connections = make(map[*types.WebSocketConnection]bool)
@@ -82,48 +84,53 @@ func handleMessage(wsc *types.WebSocketConnection, message []byte) {
 	log.Println("Start of handleMessage...")
 
 	switch message[0] {
-		//SUBSCRIBE
-		case 1:
-			fmt.Println("Received message type SUBSCRIBE")
-			input := subscribe.ClientInputSubscription{
-				WSConn: wsc,
-			}
-			input.Unmarshal(message)
-			//
-		//RPC
-		case 2:
-			fmt.Println("Received message type RPC")
-			input := rpc.ClientInputRPC{
-				WSConn: wsc,
-			}
-			input.Unmarshal(message)
-			//Check if class exists
-			//Check if method exists
-			//Execute
-			//Get the result
-			//Return the response
-		//ENDPOINT
-		case 3:
-			fmt.Println("Received message type ENDPOINT")
-			input := rest.ClientInputRest{
-				WSConn: wsc,
-			}
-			input.Unmarshal(message)
-			//Check if endpoint exists
-			//Check if the methd exists
-			//Execute
-			//Return the response
-		default:
-			msg := "Unknown message type"
-			fmt.Println(msg)
-			output := types.ClientOutput{
-				ReqId: message[0],
-				MsgType: types.WSTypeErrorOutputMessage,
-				Data: msg,
-			}
-			wsc.Write(websocket.BinaryMessage,byte(output.Marshal()))
-			return
+	//SUBSCRIBE
+	case 1:
+		log.Println("Received message type SUBSCRIBE")
+		input := subscribe.ClientInputSubscription{
+			WSConn: wsc,
 		}
+		input.Unmarshal(message)
+		//
+	//RPC
+	case 2:
+		log.Println("Received message type RPC")
+		input := rpc.ClientInputRPC{
+			WSConn: wsc,
+		}
+		input.Unmarshal(message)
+		//Check if class exists
+		//Check if method exists
+		//Execute
+		//Get the result
+		//Return the response
+	//ENDPOINT
+	case 3:
+		log.Println("Received message type ENDPOINT")
+		input := rest.ClientInputRest{
+			WSConn: wsc,
+		}
+		input.Unmarshal(message)
+		//Check if endpoint exists
+		//Check if the methd exists
+		//Execute
+		//Return the response
+	default:
+		msg := "Unknown message type"
+		log.Println(msg)
+		output := types.ClientOutput{
+			ReqId:   message[0],
+			MsgType: types.WSTypeErrorOutputMessage,
+			Data:    msg,
+		}
+
+		data, err := output.Marshal()
+		if err != nil {
+			log.Println("Error to marshal the output unknown message type error")
+		}
+
+		wsc.Write(websocket.BinaryMessage, data)
+		return
 	}
 	log.Println("End of handleMessage...")
 }

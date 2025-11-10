@@ -33,6 +33,13 @@ func IsValid(class Class, method Method) bool {
 	return ok
 }
 
-func Exec(class Class, method Method, ClientInput *types.ClientInputInterface) *types.ClientOutput {
-	return routes[class][method](ClientInput)
+func Exec(ClientInput types.ClientInputInterface) *types.ClientOutput {
+	// Type assertion to access fields on the concrete type
+	clientInputRPC, ok := ClientInput.(*types.ClientInputRPC)
+	if !ok {
+		// If ClientInput is not of type *types.ClientInputRPC, return nil or handle the error
+		return nil // or handle the error appropriately
+	}
+
+	return routes[Class(clientInputRPC.Class)][Method(clientInputRPC.Method)](clientInputRPC)
 }

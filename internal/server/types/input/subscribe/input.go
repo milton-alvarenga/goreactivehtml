@@ -6,20 +6,24 @@ import (
 	"strings"
 
 	"github.com/gorilla/websocket"
-	"github.com/milton-alvarenga/goreactivehtml/internal/server/endpoints"
 	"github.com/milton-alvarenga/goreactivehtml/internal/server/types"
 )
 
 type ClientInputSubscription struct {
 	ReqId  string
+	Topic  string
 	Data   string
 	Header map[string]string
 	WSConn *types.WebSocketConnection
 }
 
 func (c ClientInputSubscription) SendToClient(ClientOutput types.ClientOutput) bool {
-	message := ClientOutput.Marshal()
-	err := c.WSConn.Write(websocket.TextMessage, []byte(message))
+	message, err := ClientOutput.Marshal()
+	if err != nil {
+		log.Println("Could not marshal client output")
+		return false
+	}
+	err = c.WSConn.Write(websocket.TextMessage, []byte(message))
 	if err != nil {
 		if websocket.IsCloseError(err) {
 			log.Println("Client closed the connection")
@@ -33,26 +37,15 @@ func (c ClientInputSubscription) SendToClient(ClientOutput types.ClientOutput) b
 
 func (c ClientInputSubscription) IsValidMessage() error {
 
-	if !c.IsValidEndpoint() {
+	if !c.IsValidTopic() {
 		return errors.New("invalid endpoint")
 	}
 
-	if !c.IsValidOperation(c.Operation) {
-		return errors.New("invalid operation")
-	}
-
-	if strings.TrimSpace(c.Origin) == "" {
-		return errors.New("invalid origin")
-	}
 	return nil
 }
 
 func (c *ClientInputSubscription) Close() error {
 	return c.WSConn.Conn.Close()
-}
-
-func (c ClientInputSubscription) GetValidEndpoints() endpoints.Router {
-	return endpoints.Router
 }
 
 func (c ClientInputSubscription) IsValidEndpoint() bool {

@@ -48,12 +48,21 @@ loop:
 		}
 
 		switch msgType {
+		//Method not supported
 		case websocket.TextMessage:
 			message = string(msg)
 
-			//TODO
-			//Method not supported
+			output := shared.ClientOutput{
+				MsgType:     shared.WSTypeErrorOutputMessage,
+				Destination: string(shared.WSDestinationUnknown),
+				Data:        "Websocket TextMessage not yeat supported. Use websocket BinaryMessage mode",
+			}
+			//we need a specific binary unmarshal code
+			wsc.Write(websocket.TextMessage, []byte(output.Marshal()))
+			continue
 		case websocket.BinaryMessage:
+			// Handle the message in a separate goroutine
+			go handleMessage(wsc, msg)
 		case websocket.CloseMessage:
 			//TODO
 			//ADD CONTEXT AND SEND KILL SIGNAL TO GO ROUTINE
@@ -64,9 +73,6 @@ loop:
 		case websocket.PongMessage:
 			continue
 		}
-
-		// Handle the message in a separate goroutine
-		go handleMessage(wsc, msg)
 	}
 	log.Println("End of EntryConnections...")
 }
@@ -82,18 +88,31 @@ func handleMessage(wsc *types.WebSocketConnection, message []byte) {
 			input := subscribe.ClientInputSubscription{
 				WSConn: wsc,
 			}
+			input.Unmarshal(message)
+			//
 		//RPC
 		case 2:
 			fmt.Println("Received message type RPC")
 			input := rpc.ClientInputRPC{
 				WSConn: wsc,
 			}
+			input.Unmarshal(message)
+			//Check if class exists
+			//Check if method exists
+			//Execute
+			//Get the result
+			//Return the response
 		//ENDPOINT
 		case 3:
 			fmt.Println("Received message type ENDPOINT")
 			input := rest.ClientInputRest{
 				WSConn: wsc,
 			}
+			input.Unmarshal(message)
+			//Check if endpoint exists
+			//Check if the methd exists
+			//Execute
+			//Return the response
 		default:
 			msg := "Unknown message type"
 			fmt.Println(msg)
@@ -105,37 +124,6 @@ func handleMessage(wsc *types.WebSocketConnection, message []byte) {
 			wsc.Write(websocket.BinaryMessage,byte(output.Marshal()))
 			return
 		}
-	}
-
-	input.Unmarshal(message)
-
-	err := input.IsValidMessage()
-
-	if err != nil {
-		errorMsg := err.Error()
-		outputMsg := types.ClientOutput{
-			MsgType:     types.WSTypeErrorOutputMessage,
-			Destination: input.Origin,
-			Data:        errorMsg,
-		}
-		input.SendToClient(outputMsg)
-		log.Println(errorMsg)
-	}
-
-	switch input.Endpoint {
-	case "/book":
-		// Handle book message
-		service.BookClientInputProcessor(input)
-	case "/trades":
-		// Handle trades message
-	case "/broker":
-		// Handle broker message
-	case "/stats/brokers":
-	case "/stats/symbol":
-	case "/stats/asset":
-	case "/stats/exchange":
-	case "/pingpong":
-		service.PingPongProcessor(input)
 	}
 	log.Println("End of handleMessage...")
 }

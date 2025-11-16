@@ -75,8 +75,9 @@ func main() {
 		sb.WriteString("\n")
 	}
 
+	//@TODO The JavaScript code is almost correct, but you should ensure that after calling sync(), the internal variables are updated.
 	if len(globals) > 0 {
-		sb.WriteString("function sync(var_nm,v){ws.conn.requestRPC(bff,'$$sync',{[var_nm]:v},null); return v}\n\n")
+		sb.WriteString("function sync(var_nm,v){wsconn.requestRPC(bff,'$$sync',{[var_nm]:v},null).then(() => eval(`_${var_nm} = v`)),(error) => console.log(error)); return v}\n\n")
 	}
 
 	//Create globals variable as null right now, not initialized with zero of its type
@@ -129,7 +130,8 @@ func main() {
 
 		sb.WriteString("};\n") // Close the params object
 
-		sb.WriteString(fmt.Sprintf("  wsconn.requestRPC(bff,'%s',params,null);\n", fn))
+		//@TODO Need to see how to return the value of the processment
+		sb.WriteString(fmt.Sprintf("  return wsconn.requestRPC(bff,'%s',params,null);\n", fn))
 
 		sb.WriteString("}\n\n")
 	}

@@ -26,7 +26,7 @@ class WebSocketUtil {
 
         const reqId = this.WebSocketEvents.getNextRequestId()
 
-        send(binaryData, reqId)
+        return send(binaryData, reqId)
     }
 
     unsubscribe(destination, callback){
@@ -34,20 +34,20 @@ class WebSocketUtil {
     }
 
     //Like a client server request
-    requestEndpoint(rest_method,endpoint,data,headers,callback_success,callback_fail){
+    requestEndpoint(rest_method,endpoint,data,headers){
         const reqId = this.WebSocketEvents.getNextRequestId()
 
-        const binaryData = formatBinaryRequestEndpoint(reqId, method, endpoint, origin, data, header);
+        const binaryData = formatBinaryRequestEndpoint(reqId, method, endpoint, origin, data, headers);
 
-        send(binaryData,reqId,callback_success,callback_fail)
+        return send(binaryData,reqId)
     }
 
-    requestRPC(bff,method,params,headers,callback_success,callback_fail){
+    requestRPC(bff,method,params,headers){
         const reqId = this.WebSocketEvents.getNextRequestId();
 
-        const binaryData = formatRequestRPC(reqId, bff, method, params, header);
+        const binaryData = formatRequestRPC(reqId, bff, method, params, headers);
 
-        send(binaryData,reqId,callback_success,callback_fail)
+        return send(binaryData,reqId)
     }
 
     formatRequestEndpoint(reqId, endpoint, operation, origin, data){
@@ -242,7 +242,7 @@ class WebSocketUtil {
     }
 
 
-    send(binaryData, reqId, callback_success,callback_fail){
+    send(binaryData, reqId){
         if (!this.connected){
             throw new Error("WebSocket not connected "+this.url);
         }
@@ -250,11 +250,13 @@ class WebSocketUtil {
         if (this.ws.readyState !== WebSocket.OPEN ) {
             throw new Error("WebSocket is not open. Could not connect on "+this.url)
         }
-        
-        // Add the resolve/reject callbacks to pendingRequests using reqId
-        this.WebSocketEvents.pendingRequests[reqId] = [callback_success,callback_fail]
 
-        this.ws.send(binaryData)
+        let promise = new Promise(function(resolve, reject) {
+            this.ws.send(binaryData)
+            // Add the resolve/reject callbacks to pendingRequests using reqId
+            this.WebSocketEvents.pendingRequests[reqId] = {resolve, reject};
+        });
+        return promise
     }
 
     normalizeEndpoint(endpoint) {

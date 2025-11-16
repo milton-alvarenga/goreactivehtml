@@ -10,6 +10,7 @@ class WebSocketEvents {
         this.pendingRequests = new Array(256);
         this.RequestId[0] = 0;
         this.ws.onmessage = this.processBinaryResponse.bind(this)
+        this.ws.onerror = this.processBinaryErrorResponse.bind(this)
         this.ws.onclose = () => {
             ws.close()
         }
@@ -57,13 +58,19 @@ class WebSocketEvents {
             this.triggerSubscriptions(response);
         } else if (this.pendingRequests[response.ReqId] ){
             if( response.MsgType === "S" ){
-                this.pendingRequests[response.ReqId][0](response)
+                this.pendingRequests[response.ReqId].resolve(response)
             } else {
-                this.pendingRequests[response.ReqId][1](response)
+                this.pendingRequests[response.ReqId].reject(response)
             }
             this.pendingRequests[response.ReqId] = null
         }
     }
+
+    processBinaryErrorResponse(error){
+        // If there was an error, reject the promise
+        this.WebSocketEvents.pendingRequests[reqId].reject(error);
+    }
+
     /*
     processResponse(event) {
         let response = this.unmarshalResponse(event.data)

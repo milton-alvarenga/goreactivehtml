@@ -1,0 +1,30 @@
+directory structure
+
+business/<endpoint_directory_structure>
+
+//Data 
+type Input struct
+type Output struct
+
+func main(){}
+
+func perm(){}
+func ownership(){}??
+
+
+
+ou estilo GPC???
+
+
+directory structure
+
+business/<page_endpoint_directory_structure>
+
+
+//Data 
+type InputFunc1 struct (if not a standard type)
+type OutputFunc2 struct (if not a standard type)
+
+func Func1(){}
+func Func2(){}
+func func3(){} //Not exported and not being able to use on js

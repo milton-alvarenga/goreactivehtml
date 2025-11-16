@@ -1,0 +1,6 @@
+Types
+    Front
+        Internals
+            $$/listen/var/<varname>
+    Backend
+        Add the client connection to broadcast variable

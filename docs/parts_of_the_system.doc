@@ -1,0 +1,8 @@
+Page
+    - components
+    - widgets
+
+Page
+    - request by GET REST
+    - server hit
+    - check for .html to

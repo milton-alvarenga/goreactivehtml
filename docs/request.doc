@@ -1,0 +1,10 @@
+JS
+    - There are 4 ways to request
+        - Request a .html and its assets
+            - Use REST request
+        - Request an api/endpoint like
+            - Use websocket endpoint method
+        - Request a RPC like
+            - Use websocket RPC method
+        - Request for subscription (need to add the connection to the broadcast)
+            - Use websocket subscription method

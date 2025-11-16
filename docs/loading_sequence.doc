@@ -1,0 +1,26 @@
+Client:
+    - Request the URL
+
+GO:
+    - HTTP server request to load the .html
+    - Router find the html
+    - Middleware
+        - Run the business as goroutine
+        - Load the html
+        - Check if go routine is ready
+            - No, add to the end of html the PID of business goroutine
+            - Yes, add the content to the html
+    - End of request
+
+HTML:
+    - If it has the data:
+        - render
+        - If not, request the data using the PID
+    - Execute connection to go requesting the WebSocket Communication Channel
+
+GO:
+    - HTTP is requested to open WebSocket Communication
+    - Stablish WebSocket connection
+    - Execute the business
+    - Loads business global variable for that specific user
+    - Wait for webbrowser commands or go push to the client

@@ -1,0 +1,20 @@
+myapp/
+├── cmd/
+│   └── server/
+│       ├── main.go           # Entry point for the Go backend (WebSocket server, DB connection, etc.)
+├── internal/
+│   ├── db/
+│   │   └── db.go            # DB connection logic and queries
+│   ├── tasks/
+│   │   └── tasks.go         # Task model, logic for loading, updating, adding, deleting tasks
+│   └── ws/
+│       └── websocket.go     # WebSocket setup and message handling
+├── pkg/
+│   └── taskmanager.go       # Task manager functions (optional: generic task logic)
+├── web/
+│   ├── frontend/            # Web frontend (static assets, JS, HTML)
+│   │   ├── index.html       # HTML page for the frontend
+│   │   ├── main.js          # JavaScript that interacts with Go via WebSocket
+│   │   └── style.css        # Optional CSS for styling
+│   └── go-bindings.go       # Go functions and types exported to JS (via WebSocket)
+└── go.mod                   # Go module file for dependencies

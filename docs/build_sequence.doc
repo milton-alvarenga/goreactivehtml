@@ -1,0 +1,31 @@
+
+
+- create business directory structure in memory
+- parse each business
+    - List of:
+        - Global variable
+        - Global functions
+            - function arguments
+    - Create JS file ()
+    - 
+
+
+
+Final structure:
+    - web
+        - dev
+            - node_modules
+            - public
+            - src
+                - assets
+                - components
+                - features
+                - hooks
+                - styles
+                - utils
+                - libs
+            - pages
+                - index.html or index.exthtml or index.datatml or index.goreactml????
+            - package.json
+            - vite.config.js
+        - dist

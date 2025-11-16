@@ -5,10 +5,10 @@ Load()
 let edit_description = false
 let updating = false
 
-function updateDesc(task){
+async function updateDesc(task){
     updating = true
     edit_description = false
-    Update(task)
+    await Update(task)
     updating = false
 }
 </script>

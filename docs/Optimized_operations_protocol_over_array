@@ -173,7 +173,7 @@
         <mxCell id="JomInJu5vw6z_9Fptp0c-56" value="Bit 6" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="450" y="370" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="JomInJu5vw6z_9Fptp0c-57" value="1 bit operation&lt;br&gt;Partial INSERT?&lt;br&gt;0 =&amp;gt; Update the entire data on the pos&lt;br&gt;1 =&amp;gt; apply a patch on array or object data" style="whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+        <mxCell id="JomInJu5vw6z_9Fptp0c-57" value="1 bit operation&lt;br&gt;Partial UPDATE?&lt;br&gt;0 =&amp;gt; Update the entire data on the pos&lt;br&gt;1 =&amp;gt; apply a patch on array or object data" style="whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
           <mxGeometry x="420" y="410" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="JomInJu5vw6z_9Fptp0c-71" value="Bit 7" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">

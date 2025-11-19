@@ -1,0 +1,37 @@
+1 Byte
+    Bits 0–1:  Operation
+        00 = DELETE
+        01 = UPDATE
+        11 = INSERT
+        (10 unused — maybe future operation)
+
+    Bits 2–3:  Position Size Indicator
+        00 = 0 bytes  (only allowed for INSERT?)
+        01 = 1 byte
+        10 = 2 bytes
+        11 = 3 bytes
+
+    Bits 4–5:  Data Size Indicator
+        00 = 0 bytes
+        01 = 1 byte
+        10 = 2 bytes
+        11 = 3 bytes
+
+    Bit 6: Partial/complete update/insert
+        0 = Complete
+        1 = Partial
+
+    Bit 7: Bulk Flag
+        0 = single
+        1 = bulk
+
+
+Mode	Bulk	Partial	Meaning
+00	0	0	Delete single
+01	0	0	Update single (full)
+11	0	0	Insert single (full)
+00	1	0	Bulk delete
+01	1	0	Bulk update (dense)
+11	1	0	Bulk insert (dense)
+01	0	1	Partial update (sparse)
+01	1	1	Bulk partial update (sparse!)

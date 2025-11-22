@@ -151,6 +151,30 @@ test("INSERT element", () => {
 });
 
 /*
+Field	    Value
+op	        INSERT
+bulk	    false
+partial	    false
+posSize	    1 byte
+dataSize	1 byte (length prefix)
+position	0
+payload	    "A"
+*/
+test('InsertSingle', () => {
+    // This is the Go-generated binary: header, pos, length, payload
+    const buffer = new Uint8Array([23, 0, 3, 34, 65, 34]); // [23, 0, 3, '"', 'A', '"']
+
+    // Target array to apply the operation to
+    const target = [];
+
+    // Apply the binary operation
+    applyBinaryOperation(buffer, target);
+
+    // Expect "A" inserted at index 0
+    expect(target[0]).toBe("A");
+});
+
+/*
 BULK DELETE — header:
     bulk = 1
     op = 00

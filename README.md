@@ -75,3 +75,22 @@ Check examples to have simples collapsible details pages/components that can be 
 ### Dev Dependency
  - extHTML
  - Go
+
+# Unit test
+This is a complex system having JS and Go language code, as it target to execute browser communication as client with the server.
+
+All the tests should be executed inside the project container. If you are using devcontainer and vscode, you can use the regular vscode terminal connected to DevContainer.
+
+## JS lib Unit Test
+Go to root directory of the project
+```
+cd web/lib
+npm test -- --verbose --runInBand
+```
+
+## Go language encode Unit Test
+Go to root directory of the project
+```
+cd tests/encoder
+go test go_test.go
+```

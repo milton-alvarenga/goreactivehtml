@@ -13,6 +13,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs
+
 # Install Buf
 RUN curl -o /usr/local/bin/buf -sSL "https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-$(uname -s)-$(uname -m)" \
     && chmod +x /usr/local/bin/buf

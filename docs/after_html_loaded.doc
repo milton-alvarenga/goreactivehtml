@@ -2,9 +2,11 @@ Variable Types:
     - Global var only on Go Language
         - Any change on client side:
             - A new request and update on variable to update the value on go language
+
     - Global var only on Javascript
         - Go stateless
         - Go receive the values to process and return the result
+
     - Global var on both (Javascript and Go Language)
         - Need a clear and standard way to:
             - Go Update Javascript

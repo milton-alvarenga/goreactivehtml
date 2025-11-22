@@ -24,6 +24,15 @@ export function applyBinaryOperation(buffer, target, debug) {
     const partial  = (header >> 6) & 1;       // bit 6
     const bulk     = (header >> 7) & 1;       // bit 7
 
+    if(debug){
+        console.log("op",op);
+        console.log("posSize",posSize);
+        console.log("dataSize",dataSize);
+        console.log("partial",partial);
+        console.log("bulk",bulk);
+        console.log("------------");
+    }
+
     // ---- Reading helpers ----
     function readSizedInt(size) {
         switch (size) {
@@ -143,7 +152,7 @@ export function applyBinaryOperation(buffer, target, debug) {
     //   The decoder stops after all offsets are used.
     //
 
-    while (offset < buffer.byteLength) {
+    while (offset < view.byteLength) {
         // *patch position inside array/object*
         const innerPos = readSizedInt(posSize);
 

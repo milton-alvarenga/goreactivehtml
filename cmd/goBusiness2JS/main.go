@@ -11,7 +11,8 @@ import (
 
 func main() {
 	// Hardcoding the file path for now
-	filepath := "../../examples/signup/business/index.go"
+	filepath := "../../examples/0.01/signup/business/index.go"
+
 	bff := "\"/signup/business\""
 	// Check if the file exists
 	if _, err := os.Stat(filepath); os.IsNotExist(err) {
@@ -37,7 +38,10 @@ func main() {
 			for _, spec := range genDecl.Specs {
 				if valueSpec, ok := spec.(*ast.ValueSpec); ok {
 					for _, name := range valueSpec.Names {
-						globals = append(globals, name.Name)
+						//Check as ASCII
+						if name.Name[0] >= 'A' && name.Name[0] <= 'Z' {
+							globals = append(globals, name.Name)
+						}
 					}
 				}
 			}
@@ -49,8 +53,11 @@ func main() {
 		if funcDecl, ok := decl.(*ast.FuncDecl); ok {
 			// Only export top-level functions (no methods)
 			if funcDecl.Recv == nil {
-				// Append function name and its parameters
-				functions = append(functions, funcDecl.Name.Name)
+				//Check as ASCII
+				if funcDecl.Name.Name[0] >= 'A' && funcDecl.Name.Name[0] <= 'Z' {
+					// Append function name and its parameters
+					functions = append(functions, funcDecl.Name.Name)
+				}
 			}
 		}
 	}

@@ -3,7 +3,8 @@
 //
 
 export function applyBinaryOperation(buffer, target, debug) {
-    const view = new DataView(buffer.buffer || buffer);
+    //const view = new DataView(buffer.buffer || buffer);
+    const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.length);
     debug = debug || false;
     let offset = 0;
 
@@ -56,7 +57,7 @@ export function applyBinaryOperation(buffer, target, debug) {
 
     function readJSON(sizeIndicator) {
         const dataLen = readSizedInt(sizeIndicator);
-        const bytes = new Uint8Array(buffer.buffer || buffer, offset, dataLen);
+        const bytes = new Uint8Array(buffer.buffer, buffer.byteOffset + offset, dataLen);
         offset += dataLen;
         return JSON.parse(new TextDecoder().decode(bytes));
     }

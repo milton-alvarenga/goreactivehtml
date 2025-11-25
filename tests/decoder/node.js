@@ -1,6 +1,8 @@
 import { applyBinaryOperation } from "./../../web/lib/ArrayDecodeProtocol.js";
 import fs from 'fs';
 
+process.stdout.write("Starting node\n");
+
 (async () => {
     try {
         const buffer = fs.readFileSync(0); // Read from STDIN

@@ -174,7 +174,6 @@ func TestDeleteSingle(t *testing.T) {
 	}
 }
 
-// NOK
 func TestInsertRange(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -386,7 +385,6 @@ func TestMax24BitDataLength(t *testing.T) {
 	}
 }
 
-// NOK
 func TestBulkInsertMixedSize(t *testing.T) {
 	enc := protocol.Encoder{}
 

@@ -3,19 +3,17 @@
 //
 
 export function applyBinaryOperation(buffer, target, debug) {
-    //const view = new DataView(buffer.buffer || buffer);
     const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.length);
     debug = debug || false;
     let offset = 0;
 
-    if(debug){
+    if (debug) {
         console.log("Buffer received at the start of applyBinaryOperation:", buffer);
     }
 
-
     // ---- 1. Read header ----
     const header = view.getUint8(offset++);
-    if(debug){
+    if (debug) {
         console.log("Header:", header);
     }
 
@@ -25,12 +23,12 @@ export function applyBinaryOperation(buffer, target, debug) {
     const partial  = (header >> 6) & 1;       // bit 6
     const bulk     = (header >> 7) & 1;       // bit 7
 
-    if(debug){
-        console.log("op",op);
-        console.log("posSize",posSize);
-        console.log("dataSize",dataSize);
-        console.log("partial",partial);
-        console.log("bulk",bulk);
+    if (debug) {
+        console.log("op", op);
+        console.log("posSize", posSize);
+        console.log("dataSize", dataSize);
+        console.log("partial", partial);
+        console.log("bulk", bulk);
         console.log("------------");
     }
 
@@ -71,16 +69,11 @@ export function applyBinaryOperation(buffer, target, debug) {
         const pos = readSizedInt(posSize);
 
         if (!partial) {
-            // FULL UPDATE / INSERT / DELETE
             switch (op) {
-
                 case 0b00: // DELETE
-                    // Ensure start does not exceed array length
-                    const safeStart = Math.min(start, target.length);
-                    const safeCount = Math.min(count, target.length - safeStart);
-
-                    if (safeCount > 0) target.splice(safeStart, safeCount);
-                    //target.splice(pos, 1);
+                    if (pos < target.length) {
+                        target.splice(pos, 1);
+                    }
                     return;
 
                 case 0b01: { // UPDATE
@@ -91,6 +84,12 @@ export function applyBinaryOperation(buffer, target, debug) {
 
                 case 0b11: { // INSERT
                     const value = readJSON(dataSize);
+
+                    // Ensure the array is long enough
+                    if (pos > target.length) {
+                        target.length = pos; // creates holes
+                    }
+
                     target.splice(pos, 0, value);
                     return;
                 }
@@ -98,7 +97,6 @@ export function applyBinaryOperation(buffer, target, debug) {
         }
 
         // ---- PARTIAL UPDATE (non-bulk) ----
-        // Position = index/key inside the target array or object
         const patch = readJSON(dataSize);
         applyPartialPatch(target, pos, patch);
         return;
@@ -109,9 +107,9 @@ export function applyBinaryOperation(buffer, target, debug) {
     //   BULK OPERATIONS
     // =====================================================================
     //
-    const start = readSizedInt(posSize);
-    const end   = readSizedInt(posSize);
-    const count = (end - start) + 1;
+    let start = readSizedInt(posSize);
+    let end   = readSizedInt(posSize);
+    let count = (end - start) + 1;
 
     // ----------------------------------------------------
     // Bulk Delete (no partial mode)
@@ -126,11 +124,8 @@ export function applyBinaryOperation(buffer, target, debug) {
     // ----------------------------------------------------
     if (!partial) {
         switch (op) {
-
             case 0b01: { // FULL BULK UPDATE
-                // Ensure array can accommodate end index
                 if (end >= target.length) target.length = end + 1;
-
                 for (let i = start; i <= end; i++) {
                     target[i] = readJSON(dataSize);
                 }
@@ -142,12 +137,9 @@ export function applyBinaryOperation(buffer, target, debug) {
                 for (let i = 0; i < count; i++) {
                     values[i] = readJSON(dataSize);
                 }
-
-                // Ensure holes exist BEFORE splice
                 if (start > target.length) {
                     target.length = start;
                 }
-
                 target.splice(start, 0, ...values);
                 return;
             }
@@ -159,22 +151,9 @@ export function applyBinaryOperation(buffer, target, debug) {
     //   BULK + PARTIAL  (Sparse Partial Updates)
     // =====================================================================
     //
-    // Format inside bulk partial update:
-    //   [posInsideTarget][patchData]
-    //   [posInsideTarget][patchData]
-    //   ...
-    //
-    //   The decoder stops after all offsets are used.
-    //
-
     while (offset < view.byteLength) {
-        // *patch position inside array/object*
         const innerPos = readSizedInt(posSize);
-
-        // *patch payload*
         const patch = readJSON(dataSize);
-
-        // Apply sparse partial patch
         applyPartialPatch(target, innerPos, patch);
     }
 }
@@ -184,15 +163,12 @@ export function applyBinaryOperation(buffer, target, debug) {
 //  Utility: apply a partial patch to array or object
 // ===================================================================
 function applyPartialPatch(target, posOrKey, patchValue) {
-
     if (Array.isArray(target)) {
-        // array patch: update a specific index
         target[posOrKey] = patchValue;
         return;
     }
 
     if (target && typeof target === "object") {
-        // object patch: update a specific key
         target[posOrKey] = patchValue;
         return;
     }

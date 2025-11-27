@@ -69,9 +69,14 @@ func must[T any](t *testing.T, v T, err error) T {
 func TestInsertSingle(t *testing.T) {
 	enc := protocol.Encoder{}
 	v, err := enc.EncodeInsert(0, []byte(`"A"`))
+	t.Log(v)
 	bin := must(t, v, err)
+	t.Log(bin)
+	t.Logf("Encoded binary data: %v", bin)
 	val, err := decodeWithNode(bin)
+	t.Log(val)
 	out := must(t, val, err)
+	t.Log(out)
 
 	if out[0] != "A" {
 		t.Fatalf("expected A, got %v", out)
@@ -144,6 +149,7 @@ func TestBulkPartialUpdate(t *testing.T) {
 	}
 }
 
+// NOK
 func TestDeleteSingle(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -168,6 +174,7 @@ func TestDeleteSingle(t *testing.T) {
 	}
 }
 
+// NOK
 func TestInsertRange(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -206,6 +213,7 @@ func TestUpdateRange(t *testing.T) {
 	}
 }
 
+// NOK
 func TestDeleteRange(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -224,6 +232,7 @@ func TestDeleteRange(t *testing.T) {
 	}
 }
 
+// NOK
 func TestInsertAtEnd(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -248,6 +257,7 @@ func TestInsertAtEnd(t *testing.T) {
 	}
 }
 
+// NOK
 func TestInsertBeyondEnd(t *testing.T) {
 	enc := protocol.Encoder{}
 	v, err := enc.EncodeInsert(10, []byte(`"X"`))
@@ -340,42 +350,43 @@ func TestJSONArray(t *testing.T) {
 	}
 }
 
-/*
-	func TestMax24BitPosition(t *testing.T) {
-		enc := protocol.Encoder{}
-		pos := uint32(0xFFFFFF)
+// NOK
+func TestMax24BitPosition(t *testing.T) {
+	enc := protocol.Encoder{}
+	pos := uint32(0xFFFFFF)
 
-		v, err := enc.EncodeInsert(pos, []byte(`"MAXPOS"`))
-		bin := must(t, v, err)
-		val, err := decodeWithNode(bin)
-		out := must(t, val, err)
+	v, err := enc.EncodeInsert(pos, []byte(`"MAXPOS"`))
+	bin := must(t, v, err)
+	val, err := decodeWithNode(bin)
+	out := must(t, val, err)
 
-		if out[pos] != "MAXPOS" {
-			t.Fatalf("expected MAXPOS at %d", pos)
-		}
+	if out[pos] != "MAXPOS" {
+		t.Fatalf("expected MAXPOS at %d", pos)
+	}
+}
+
+func TestMax24BitDataLength(t *testing.T) {
+	enc := protocol.Encoder{}
+
+	size := 0xFFFFF
+	big := make([]byte, size)
+	for i := range big {
+		big[i] = 'A'
 	}
 
-	func TestMax24BitDataLength(t *testing.T) {
-		enc := protocol.Encoder{}
+	jsonVal := append([]byte(`"`), append(big, '"')...)
 
-		size := 0xFFFFF
-		big := make([]byte, size)
-		for i := range big {
-			big[i] = 'A'
-		}
+	v, err := enc.EncodeInsert(0, jsonVal)
+	bin := must(t, v, err)
+	val, err := decodeWithNode(bin)
+	out := must(t, val, err)
 
-		jsonVal := append([]byte(`"`), append(big, '"')...)
-
-		v, err := enc.EncodeInsert(0, jsonVal)
-		bin := must(t, v, err)
-		val, err := decodeWithNode(bin)
-		out := must(t, val, err)
-
-		if len(out[0].(string)) != size {
-			t.Fatalf("expected len=%d got=%d", size, len(out[0].(string)))
-		}
+	if len(out[0].(string)) != size {
+		t.Fatalf("expected len=%d got=%d", size, len(out[0].(string)))
 	}
-*/
+}
+
+// NOK
 func TestBulkInsertMixedSize(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -399,6 +410,7 @@ func TestBulkInsertMixedSize(t *testing.T) {
 	}
 }
 
+// NOK
 func TestRandomFixedCases(t *testing.T) {
 	enc := protocol.Encoder{}
 

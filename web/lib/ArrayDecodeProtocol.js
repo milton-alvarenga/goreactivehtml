@@ -75,7 +75,12 @@ export function applyBinaryOperation(buffer, target, debug) {
             switch (op) {
 
                 case 0b00: // DELETE
-                    target.splice(pos, 1);
+                    // Ensure start does not exceed array length
+                    const safeStart = Math.min(start, target.length);
+                    const safeCount = Math.min(count, target.length - safeStart);
+
+                    if (safeCount > 0) target.splice(safeStart, safeCount);
+                    //target.splice(pos, 1);
                     return;
 
                 case 0b01: { // UPDATE
@@ -123,6 +128,9 @@ export function applyBinaryOperation(buffer, target, debug) {
         switch (op) {
 
             case 0b01: { // FULL BULK UPDATE
+                // Ensure array can accommodate end index
+                if (end >= target.length) target.length = end + 1;
+
                 for (let i = start; i <= end; i++) {
                     target[i] = readJSON(dataSize);
                 }

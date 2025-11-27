@@ -134,6 +134,12 @@ export function applyBinaryOperation(buffer, target, debug) {
                 for (let i = 0; i < count; i++) {
                     values[i] = readJSON(dataSize);
                 }
+
+                // Ensure holes exist BEFORE splice
+                if (start > target.length) {
+                    target.length = start;
+                }
+
                 target.splice(start, 0, ...values);
                 return;
             }

@@ -149,8 +149,50 @@ func TestBulkPartialUpdate(t *testing.T) {
 	}
 }
 
-// NOK
 func TestDeleteSingle(t *testing.T) {
+	enc := protocol.Encoder{}
+
+	// Start with empty array
+	fullArray := [][]byte{[]byte(`1`)}
+
+	v, err := enc.EncodeUpdateRange(0, uint32(len(fullArray)-1), fullArray)
+	val, err := decodeWithNode(must(t, v, err))
+	out := must(t, val, err)
+	if len(out) != 1 {
+		t.Fatalf("delete failed one element: %v", out)
+	}
+
+	// Add second element
+	fullArray = append(fullArray, []byte(`2`))
+	v, err = enc.EncodeUpdateRange(0, uint32(len(fullArray)-1), fullArray)
+	val, err = decodeWithNode(must(t, v, err))
+	out = must(t, val, err)
+	if len(out) != 2 {
+		t.Fatalf("delete failed two element: %v", out)
+	}
+
+	// Add third element
+	fullArray = append(fullArray, []byte(`3`))
+	v, err = enc.EncodeUpdateRange(0, uint32(len(fullArray)-1), fullArray)
+	val, err = decodeWithNode(must(t, v, err))
+	out = must(t, val, err)
+	if len(out) != 3 {
+		t.Fatalf("delete failed three element: %v", out)
+	}
+
+	// Now delete second element
+	fullArray = append(fullArray[:1], fullArray[2:]...) // remove index 1
+	v, err = enc.EncodeUpdateRange(0, uint32(len(fullArray)-1), fullArray)
+	val, err = decodeWithNode(must(t, v, err))
+	out = must(t, val, err)
+
+	if len(out) != 2 || int(out[1].(float64)) != 3 {
+		t.Fatalf("delete failed: %v", out)
+	}
+}
+
+// NOK
+func TestDeleteSingleStateFul(t *testing.T) {
 	enc := protocol.Encoder{}
 
 	v, err := enc.EncodeInsert(0, []byte(`1`))

@@ -208,33 +208,29 @@ func TestDeleteSingle(t *testing.T) {
 	}
 }
 
-// NOK - Stateful node.js did not exists on the current version
 /*
-func TestDeleteSingleStateFul(t *testing.T) {
-	enc := protocol.Encoder{}
+	func TestDeleteSingleInitialState(t *testing.T) {
+		enc := protocol.Encoder{}
 
-	v, err := enc.EncodeInsert(0, []byte(`1`))
-	val, err := decodeWithNode(must(t, v, err), []interface{}{})
-	must(t, val, err)
+		// Initial array [1, 2, 3] as []byte, but we need []interface{}
+		initial := [][]byte{
+			[]byte("1"), // "1" as []byte
+			[]byte("2"), // "2" as []byte
+			[]byte("3"), // "3" as []byte
+		}
 
-	v, err = enc.EncodeInsert(1, []byte(`2`))
-	val, err = decodeWithNode(must(t, v, err), []interface{}{})
-	must(t, val, err)
+		// Encode delete operation at position 1
+		v, err := enc.EncodeDelete(1)
+		// Apply operation on the initial state
+		val, err := decodeWithNode(must(t, v, err), initial)
+		out := must(t, val, err)
 
-	v, err = enc.EncodeInsert(2, []byte(`3`))
-	val, err = decodeWithNode(must(t, v, err), []interface{}{})
-	must(t, val, err)
-
-	v, err = enc.EncodeDelete(1)
-	val, err = decodeWithNode(must(t, v, err), []interface{}{})
-	out := must(t, val, err)
-
-	if len(out) != 2 || int(out[1].(float64)) != 3 {
-		t.Fatalf("delete failed: %v", out)
+		// The expected result is [1, 3] after deleting the element at position 1
+		if len(out) != 2 || string(out[0].([]byte)) != "1" || string(out[1].([]byte)) != "3" {
+			t.Fatalf("delete failed: %v", out)
+		}
 	}
-}
 */
-
 func TestInsertRange(t *testing.T) {
 	enc := protocol.Encoder{}
 
@@ -249,6 +245,24 @@ func TestInsertRange(t *testing.T) {
 	out := must(t, val, err)
 
 	if out[10] != "A" || out[11] != "B" || out[12] != "C" {
+		t.Fatalf("range insert failed: %v", out)
+	}
+}
+
+func TestInsertRangeText(t *testing.T) {
+	enc := protocol.Encoder{}
+
+	payloads := [][]byte{
+		[]byte(`"ABC"`),
+		[]byte(`"BCD"`),
+		[]byte(`"CDE"`),
+	}
+
+	v, err := enc.EncodeInsertRange(4, 6, payloads)
+	val, err := decodeWithNode(must(t, v, err), []interface{}{})
+	out := must(t, val, err)
+
+	if out[4] != "ABC" || out[5] != "BCD" || out[6] != "CDE" {
 		t.Fatalf("range insert failed: %v", out)
 	}
 }

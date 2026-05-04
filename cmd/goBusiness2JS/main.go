@@ -1,15 +1,29 @@
 package main
 
 import (
+    "flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+    "log"
 	"os"
 	"strings"
 )
 
 func main() {
+    var version = "dev"
+    var buildDate = "unknown"
+
+	showVersion := flag.Bool("v", false, "Show current version (git hash)")
+	flag.Parse()
+
+	if *showVersion {
+		log.Printf("Ganha1000 Version: %s\n", version)
+		log.Printf("Build Date: %s\n", buildDate)
+		return
+	}
+
 	// Hardcoding the file path for now
 	filepath := "../../examples/0.01/signup/business/index.go"
 

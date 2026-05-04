@@ -1,6 +1,7 @@
 package main
 
 import (
+    "flag"
 	"log"
 	"net/http"
 
@@ -21,6 +22,19 @@ Msg pattern
 		data
 */
 func main() {
+    var version = "dev"
+    var buildDate = "unknown"
+
+	showVersion := flag.Bool("v", false, "Show current version (git hash)")
+	flag.Parse()
+
+	if *showVersion {
+		log.Printf("Ganha1000 Version: %s\n", version)
+		log.Printf("Build Date: %s\n", buildDate)
+		return
+	}
+
+
 	http.HandleFunc("/ws", handle.WS)
 
 	// Serve static files from the "static" directory

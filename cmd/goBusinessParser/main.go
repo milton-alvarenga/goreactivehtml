@@ -1,13 +1,27 @@
 package main
 
 import (
+    "flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+    "log"
 )
 
 func main() {
+    var version = "dev"
+    var buildDate = "unknown"
+
+	showVersion := flag.Bool("v", false, "Show current version (git hash)")
+	flag.Parse()
+
+	if *showVersion {
+		log.Printf("Ganha1000 Version: %s\n", version)
+		log.Printf("Build Date: %s\n", buildDate)
+		return
+	}
+
 	fset := token.NewFileSet() // positions are relative to fset
 
 	// Parse the Go source file (replace "example.go" with your file)
